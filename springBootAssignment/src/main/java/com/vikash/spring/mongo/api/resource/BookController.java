@@ -42,21 +42,19 @@ public class BookController {
 		return repository.findById(id);
 	}
 @PutMapping("/update/{id}")
-	public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody Book book) {
+	public Book update(@PathVariable("id") int id, @RequestBody Book book) {
 		Optional<Book> b1 = repository.findById(id);
 		Book currentBook = b1.get();
 		if (currentBook == null) {
-			logger.error("Unable to update. Book with id {} not found.", id);
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			book.setId(id);
+			return repository.save(book);
 		}
 
 		currentBook.setAuthorName(book.getAuthorName());
 		currentBook.setBookName(book.getBookName());
-		currentBook.setId(book.getId());
 
-		repository.save(currentBook);
+		return repository.save(currentBook);
 
-		return new ResponseEntity<Book>(currentBook, HttpStatus.OK);
 	}
 
 }

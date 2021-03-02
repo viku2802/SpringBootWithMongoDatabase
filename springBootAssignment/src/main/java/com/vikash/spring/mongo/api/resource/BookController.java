@@ -41,20 +41,12 @@ public class BookController {
 	public Optional<Book> getBook(@PathVariable int id) {
 		return repository.findById(id);
 	}
-
-	@DeleteMapping("/delete/{id}")
-	public String deleteBook(@PathVariable int id) {
-		repository.deleteById(id);
-		return "book deleted with id : " + id;
-	}
-
-	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
+@PutMapping("/update/{id}")
 	public ResponseEntity<?> update(@PathVariable("id") int id, @RequestBody Book book) {
-		logger.info("Updating User with id {}", id);
 		Optional<Book> b1 = repository.findById(id);
 		Book currentBook = b1.get();
 		if (currentBook == null) {
-			logger.error("Unable to update. User with id {} not found.", id);
+			logger.error("Unable to update. Book with id {} not found.", id);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 
